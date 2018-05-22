@@ -21,6 +21,7 @@ class Modelo(models.Model):
         Marca,
         verbose_name=_("Marca"),
         related_name="marcas",
+        on_delete=models.PROTECT
     )
     nombre = models.CharField(
         max_length=255,

@@ -10,4 +10,7 @@ class MarcaAdmin(admin.ModelAdmin):
 
 @admin.register(Modelo)
 class ModeloAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        'marca',
+        'nombre',
+    )
