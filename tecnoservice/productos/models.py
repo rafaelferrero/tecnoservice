@@ -21,16 +21,43 @@ class Modelo(models.Model):
         Marca,
         verbose_name=_("Marca"),
         related_name="marcas",
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     nombre = models.CharField(
         max_length=255,
-        verbose_name=_("Modelo")
+        verbose_name=_("Modelo"),
     )
 
     def __str__(self):
-        return "{}".format(self.nombre)
+        return "{} {}".format(
+            self.marca.nombre,
+            self.nombre,
+        )
 
     class Meta:
         verbose_name =_("Modelo")
         verbose_name_plural = _("Modelos")
+
+
+class Version(models.Model):
+    modelo = models.ForeignKey(
+        Modelo,
+        verbose_name=_("Modelo"),
+        related_name="versiones",
+        on_delete=models.PROTECT,
+    )
+    nombre = models.CharField(
+        max_length=255,
+        verbose_name=_("Versión"),
+    )
+
+    def __str__(self):
+        return "{} {} ({})".format(
+            self.modelo.marca.nombre,
+            self.modelo.nombre,
+            self.nombre,
+        )
+
+    class Meta:
+        verbose_name = _("Versión")
+        verbose_name_plural = _("Versiones")

@@ -9,6 +9,7 @@ __pycache__/
 # Distribution / packaging
 .idea/
 migrations/
+dumps/
 .Python
 build/
 develop-eggs/
