@@ -52,7 +52,7 @@ class Servicio(models.Model):
     tarea = models.TextField(
         verbose_name=_("Tarea realizada"),
     )
-    fecha = models.DateField(
+    fecha = models.DateTimeField(
         default=timezone.now,
         verbose_name=_("Fecha"),
     )

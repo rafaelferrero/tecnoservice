@@ -69,8 +69,8 @@ class Equipo(models.Model):
     )
 
     def __str__(self):
-        return "{} ({})".format(
-            self.version,
+        return "{} (S/N: {})".format(
+            self.version.modelo,
             self.serial,
         )
 
