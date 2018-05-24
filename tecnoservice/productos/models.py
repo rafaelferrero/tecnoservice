@@ -27,6 +27,12 @@ class Modelo(models.Model):
         max_length=255,
         verbose_name=_("Modelo"),
     )
+    tipo = models.CharField(
+        max_length=255,
+        verbose_name=_("Tipo"),
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return "{} {}".format(
