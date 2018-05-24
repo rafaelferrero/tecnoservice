@@ -7,3 +7,9 @@ ESTADOS_ORDEN = (
     ('SOLUCIONADA', _("Solucionada")),
     ('CERRADA', _("Cerrada")),
 )
+
+TIPO_TAREA = (
+    ('TRABAJO', _("Trabajo")),
+    ('PAUSA', _("Pausa")),
+    ('SOLUCION', _("Solucion")),
+)

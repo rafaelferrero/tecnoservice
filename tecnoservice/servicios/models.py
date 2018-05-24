@@ -1,8 +1,10 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from clientes.models import Cliente, Equipo
-from .choices import ESTADOS_ORDEN
+from .choices import ESTADOS_ORDEN, TIPO_TAREA
 
 
 def ultima_orden():
@@ -49,6 +51,12 @@ class Servicio(models.Model):
         on_delete=models.PROTECT,
         verbose_name=_("Orden"),
     )
+    tipo = models.CharField(
+        max_length=255,
+        verbose_name=_("Tipo de tarea"),
+        choices=TIPO_TAREA,
+        default=TIPO_TAREA[0][0],
+    )
     tarea = models.TextField(
         verbose_name=_("Tarea realizada"),
     )
@@ -87,6 +95,31 @@ class EstadoOrden(models.Model):
         default=timezone.now,
         verbose_name=_("Fecha Cambio de Estado")
     )
+
+    @receiver(post_save, sender=Orden)
+    def set_nuevo(sender, **kwargs):
+        if kwargs.get('created', True):
+            EstadoOrden.objects.create(
+                orden=kwargs.get('instance'),
+                estado='NUEVA',
+            )
+
+    @receiver(post_save, sender=Servicio)
+    def set_estado(sender, **kwargs):
+        if kwargs.get('created', True):
+            import pdb
+            pdb.set_trace()
+            servicio = kwargs.get('instance')
+            if servicio.tipo == 'TRABAJO':
+                valor = 'PROCESANDO'
+            elif servicio.tipo == 'SOLUCION':
+                valor = 'SOLUCIONADA'
+            else:
+                valor = 'ESPERANDO'
+            EstadoOrden.objects.create(
+                orden=servicio.orden,
+                estado=valor
+            )
 
     def __str__(self):
         return "Orden {} {} - {} ({})".format(
