@@ -42,6 +42,12 @@ class Cliente(models.Model):
         blank=True,
         null=True,
     )
+    clave = models.CharField(
+        max_length=30,
+        verbose_name=_("Clave Autogenerada"),
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return "{}, {}".format(

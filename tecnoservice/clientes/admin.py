@@ -10,6 +10,7 @@ class ClienteAdmin(admin.ModelAdmin):
         'direccion',
         'telefono',
         'email',
+        'clave',
     )
     exclude = ('usuario', )
     list_display = (

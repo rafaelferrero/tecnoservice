@@ -4,7 +4,10 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 from clientes.models import Cliente, Equipo
+from django.contrib.auth.models import User
 from .choices import ESTADOS_ORDEN, TIPO_TAREA
+import string
+import random
 
 
 def ultima_orden():
@@ -104,11 +107,27 @@ class EstadoOrden(models.Model):
                 estado='NUEVA',
             )
 
+            nombreusuario = kwargs.get('instance').cliente.nombre.split()[0].lower() + \
+                            kwargs.get('instance').cliente.apellido.split()[0].lower(),
+
+            dic = {
+                'first_name': kwargs.get('instance').cliente.nombre,
+                'last_name': kwargs.get('instance').cliente.apellido,
+                'email': kwargs.get('instance').cliente.email,
+                'password': ''.join(
+                    random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits) for _ in range(10)),
+            }
+
+            Cliente.objects.filter(pk=kwargs.get('instance').cliente.pk).update(clave=dic['password'])
+
+            u, created = User.objects.update_or_create(
+                username=nombreusuario[0],
+                defaults=dic
+            )
+
     @receiver(post_save, sender=Servicio)
     def set_estado(sender, **kwargs):
         if kwargs.get('created', True):
-            import pdb
-            pdb.set_trace()
             servicio = kwargs.get('instance')
             if servicio.tipo == 'TRABAJO':
                 valor = 'PROCESANDO'

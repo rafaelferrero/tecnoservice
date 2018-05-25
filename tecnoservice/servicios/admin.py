@@ -1,9 +1,22 @@
 from django.contrib import admin
 from servicios.models import Orden, Servicio, EstadoOrden
+from django.utils.translation import ugettext_lazy as _
+
+
+def marcar_entragada(modeladmin, request, queryset):
+    for q in queryset:
+        EstadoOrden.objects.create(
+            orden=q,
+            estado='CERRADA',
+        )
+
+
+marcar_entragada.short_description = _("Entrega Realizada")
 
 
 @admin.register(Orden)
 class OrdenAdmin(admin.ModelAdmin):
+    actions = [marcar_entragada, ]
     list_display = (
         'fecha',
         'numero',
